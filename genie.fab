@@ -1,0 +1,69 @@
+//Blast_Brothers 2025
+//for the Game Genie Game Jam 
+//https://forums.nesdev.org/viewtopic.php?t=26222
+
+ct U[25] main_palette = U[25](
+    $39, $2A, $10,
+    $39, $2A, $10,
+    $39, $2A, $10,
+    $39, $2A, $10,
+
+    $30, $00, $0F, //Sprites
+    $00, $00, $00,
+    $00, $00, $00,
+    $00, $00, $00,
+
+    $0F //Backdrop color
+)
+
+vars /miscvars
+    U ppumask_mirror = (PPUMASK_ON | PPUMASK_NO_CLIP)
+    U ppuctrl_mirror = (PPUCTRL_NT_2000 | PPUMASK_NO_CLIP | PPUCTRL_NMI_ON)
+
+
+//converts xy values in sprite space to a tile address in the 1st nametable
+//Ex: ($30, $80) becomes $2206
+fn sprite_xy_to_first_nt_addr(U x, U y) UU
+: +inline
+    UU xx = UU(x)
+    UU yy = UU(y & %11111000)
+    return $2000 + (xx >> 3) + (yy << 2)
+
+
+fn init()
+    {PPUMASK}(0)
+
+    palette = main_palette
+    ppu_upload_palette()
+
+    //clear NT
+    ppu_set_addr($2000)
+    for U y = 0; y < 31; y += 1
+        for U x = 0; x < 64; x += 1
+            {PPUDATA}($00)
+    hide_oam(0)
+    init_fleet()
+
+    //Turn rendering back on
+    {PPUMASK}(ppumask_mirror)
+    {PPUCTRL}(ppuctrl_mirror)
+
+nmi main_nmi()
+    ppu_upload_oam_poll_pads(0)
+    ppu_reset_scroll(0, 0)
+
+    //disable rendering
+    {PPUMASK}(0)
+
+    //re-enable rendering
+    {PPUMASK}(ppumask_mirror)
+    {PPUCTRL}(ppuctrl_mirror)
+
+mode main()
+: nmi main_nmi
+    init()
+    while true
+        nmi
+
+chrrom
+    file(fmt, "tileset.png")
