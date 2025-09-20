@@ -42,7 +42,6 @@ fn init()
         for U x = 0; x < 64; x += 1
             {PPUDATA}($00)
     hide_oam(0)
-    init_fleet()
 
     //Turn rendering back on
     {PPUMASK}(ppumask_mirror)
