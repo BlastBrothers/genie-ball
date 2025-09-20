@@ -2,22 +2,26 @@
 //for the Game Genie Game Jam 
 //https://forums.nesdev.org/viewtopic.php?t=26222
 
+data /rlz //compressed data block
+    [] main_tilemap
+        file(rlz, "tilemap.bin")
+
 ct U[25] main_palette = U[25](
-    $39, $2A, $10,
-    $39, $2A, $10,
-    $39, $2A, $10,
-    $39, $2A, $10,
+    $3D, $3D, $0F, //BG
+    $3D, $3D, $11,
+    $3D, $3D, $00,
+    $3D, $3D, $29,
 
-    $30, $00, $0F, //Sprites
-    $00, $00, $00,
-    $00, $00, $00,
-    $00, $00, $00,
+    $3D, $3D, $0F, //sprites
+    $3D, $3D, $11,
+    $3D, $3D, $00,
+    $3D, $3D, $29,
 
-    $0F //Backdrop color
+    $3D //Backdrop color
 )
 
 vars /miscvars
-    U ppumask_mirror = (PPUMASK_ON | PPUMASK_NO_CLIP)
+    U ppumask_mirror = (PPUMASK_ON | PPUMASK_NO_CLIP | PPUMASK_EMPHASIZE_R | PPUMASK_EMPHASIZE_G)
     U ppuctrl_mirror = (PPUCTRL_NT_2000 | PPUMASK_NO_CLIP | PPUCTRL_NMI_ON)
 
 
@@ -36,11 +40,38 @@ fn init()
     palette = main_palette
     ppu_upload_palette()
 
-    //clear NT
+    //clear NT (including attribute table)
     ppu_set_addr($2000)
     for U y = 0; y < 31; y += 1
         for U x = 0; x < 64; x += 1
             {PPUDATA}($00)
+
+    //Send screen data to NT
+    ppu_set_addr($2000)
+    ppu_upload_rlz(@main_tilemap)
+
+    //make minor adjustments to attribute table to draw blue bars at top and bottom
+    ppu_set_addr($23C0)
+    {PPUDATA}(%000000101)
+    {PPUDATA}(%000000101)
+    {PPUDATA}(%000000101)
+    {PPUDATA}(%000000101)
+    {PPUDATA}(%000000101)
+    {PPUDATA}(%000000101)
+    {PPUDATA}(%000000101)
+    {PPUDATA}(%000000101)
+
+    ppu_set_addr($23F8)
+    {PPUDATA}(%000000101)
+    {PPUDATA}(%000000101)
+    {PPUDATA}(%000000101)
+    {PPUDATA}(%000000101)
+    {PPUDATA}(%000000101)
+    {PPUDATA}(%000000101)
+    {PPUDATA}(%000000101)
+    {PPUDATA}(%000000101)
+    
+    //hide sprites
     hide_oam(0)
 
     //Turn rendering back on
