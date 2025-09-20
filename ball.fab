@@ -1,0 +1,58 @@
+//ball handling
+
+//TODO un-placeholderize these
+ct Position[12] ball1_positions = Position[12](
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0)
+)
+ct Position[12] ball2_positions = Position[12](
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0), //unused
+    Position(0,0) //unused
+)
+ct Position[12] ball3_positions = Position[12](
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0),
+    Position(0,0), //unused
+    Position(0,0), //unused
+    Position(0,0), //unused
+    Position(0,0) //unused
+)
+
+ct U BALL_POS_DISABLED = 12
+
+struct Ball
+    //the 3 balls have different numbers of positions, but we reserve 12 indices anyway. Somehow I doubt that Ball is RAM-heavy
+    Position[12] positions //not a spritedef because we don't need sprite tile info - it's always the same for each ball
+    U pos_count //ball 1 has 12 positions, ball 2 has 10, ball 3 has 8
+    U current_pos //0-11 could be valid, 12 is 'disabled', anything else is nonsense
+
+vars /vars_ball
+    Ball ball1 = Ball(ball1_positions, 12, BALL_POS_DISABLED)
+    Ball ball2 = Ball(ball2_positions, 10, BALL_POS_DISABLED)
+    Ball ball3 = Ball(ball3_positions, 8, BALL_POS_DISABLED)
