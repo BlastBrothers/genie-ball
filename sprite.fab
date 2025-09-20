@@ -58,6 +58,22 @@ ct SpriteDef[4] sdef_legr_up = SpriteDef[4](
     SpriteDef(Position($00,$00),$00) //unused
 )
 
+ct SpriteDef[5] sdef_larm_m = SpriteDef[5](
+    SpriteDef(Position($48,$9F),$0A),
+    SpriteDef(Position($48,$97),$05),
+    SpriteDef(Position($40,$8F),$0A),
+    SpriteDef(Position($44,$87),$0B),
+    SpriteDef(Position($3C,$87),$0E)
+)
+
+ct SpriteDef[5] sdef_rarm_m = SpriteDef[5](
+    SpriteDef(Position($B0,$9F),$05),
+    SpriteDef(Position($B0,$97),$0A),
+    SpriteDef(Position($B8,$8F),$05),
+    SpriteDef(Position($BC,$87),$0D),
+    SpriteDef(Position($B4,$87),$07)
+)
+
 fn update_sprites()
     //if game_state != GAME_STATE_IDLE
     redraw_arms_and_legs()
@@ -80,7 +96,18 @@ fn redraw_arms_and_legs()
             set_oam(SPR_RIGHT_LEG_3, sdef_legr_dn[2].pos.x, sdef_legr_dn[2].pos.y, sdef_legr_dn[2].tile, 0)
             set_oam(SPR_RIGHT_LEG_4, sdef_legr_dn[3].pos.x, sdef_legr_dn[3].pos.y, sdef_legr_dn[3].tile, 0)
             
-            //TODO draw arms in center
+            //draw arms in center
+            set_oam(SPR_LEFT_ARM_1, sdef_larm_m[0].pos.x, sdef_larm_m[0].pos.y, sdef_larm_m[0].tile, 0)
+            set_oam(SPR_LEFT_ARM_2, sdef_larm_m[1].pos.x, sdef_larm_m[1].pos.y, sdef_larm_m[1].tile, 0)
+            set_oam(SPR_LEFT_ARM_3, sdef_larm_m[2].pos.x, sdef_larm_m[2].pos.y, sdef_larm_m[2].tile, 0)
+            set_oam(SPR_LEFT_ARM_4, sdef_larm_m[3].pos.x, sdef_larm_m[3].pos.y, sdef_larm_m[3].tile, 0)
+            set_oam(SPR_LEFT_ARM_5, sdef_larm_m[4].pos.x, sdef_larm_m[4].pos.y, sdef_larm_m[4].tile, 0)
+
+            set_oam(SPR_RIGHT_ARM_1, sdef_rarm_m[0].pos.x, sdef_rarm_m[0].pos.y, sdef_rarm_m[0].tile, 0)
+            set_oam(SPR_RIGHT_ARM_2, sdef_rarm_m[1].pos.x, sdef_rarm_m[1].pos.y, sdef_rarm_m[1].tile, 0)
+            set_oam(SPR_RIGHT_ARM_3, sdef_rarm_m[2].pos.x, sdef_rarm_m[2].pos.y, sdef_rarm_m[2].tile, 0)
+            set_oam(SPR_RIGHT_ARM_4, sdef_rarm_m[3].pos.x, sdef_rarm_m[3].pos.y, sdef_rarm_m[3].tile, 0)
+            set_oam(SPR_RIGHT_ARM_5, sdef_rarm_m[4].pos.x, sdef_rarm_m[4].pos.y, sdef_rarm_m[4].tile, 0)
             break
         case ARMS_LEFT
             //draw left leg down and right leg up

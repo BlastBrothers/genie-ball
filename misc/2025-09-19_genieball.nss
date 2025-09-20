@@ -55,7 +55,7 @@ VarPalBank_msprBuffer=0
 VarTileViewTagBuf=0
 VarBgPalCur=3
 VarPalActive=0
-VarTileActive=8
+VarTileActive=4
 VarBankActive=0
 VarPPUMask=96
 VarPPUMaskSet0=96
@@ -81,8 +81,8 @@ VarNameSelectionT=-1
 VarNameSelectionB=21
 VarNameCopyW=29
 VarNameCopyH=28
-VarCHRSelectionL=8
-VarCHRSelectionR=9
+VarCHRSelectionL=4
+VarCHRSelectionR=5
 VarCHRSelectionT=0
 VarCHRSelectionB=1
 VarCHRCopyW=-1
@@ -160,7 +160,7 @@ RadioAutoexport_UseSubDir_NEXXT=0
 CheckAutoexport_MetatileAsBMP=0
 
 
-VarCHRSelected=00[8]0100[f7]
+VarCHRSelected=00[4]0100[fb]
 
 
 Palette=3d[3]0f3d[3]113d[3]003d[3]290f1c21320f1122330f1223340f1324350f1324360f1526370f1627370f1928380f1829380f1b2a390f1b2b3c0f1c2c3b
@@ -178,13 +178,13 @@ CHRUndo=00[14]f0[4]00[4]f0[4]00[4]0f[4]00[4]0f[4]00[4]ff[4]00[4]ff[4]f0[4]00[4]f
 CHRCopy=00[4000]
 
 
-NameTable=00[20]0f[61]0400[1c]080f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[e]03[2]00[e]0f[2]0100[d]0f[2]00[d]020f[3]0100[b]030f[2]0300[b]020f[5]00[a]02080a05040100[a]0f[6]00[a]0a0f[4]0500[a]0f[6]00[a]080f[4]0400[a]0f[6]00[b]080e0d0400[b]0f[6]00[8]02030c060f[2]090c030100[8]0f[6]00[7]0c0400[2]0a0f[2]0500[2]080c00[7]0f[6]00[b]0a0f[2]0500[b]0f[6]00[c]0c[2]00[c]0f[6]00[1a]0f[6]0100[18]020f[63]00[20]
+NameTable=00[20]0f[61]0400[1c]080f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[e]03[2]00[e]0f[2]0100[d]0f[2]00[d]020f[3]0100[b]030f[2]0300[b]020f[5]00[a]02080a05040100[a]0f[6]00[a]0a0f[4]0500[a]0f[6]00[a]080f[4]0400[a]0f[6]00[b]080e0d0400[b]0f[6]00[8]02030c060f[2]090c030100[8]0f[6]00[7]080400[2]0a0f[2]0500[2]080400[7]0f[6]00[b]0a0f[2]0500[b]0f[6]00[c]0c[2]00[c]0f[6]00[1a]0f[6]0100[18]020f[63]00[20]
 
 
 NameCopy=00[5]0d050b000c010c0105[2]0d0409040c050d050d0500[9]05[2]0a00090008010c050c050d05020409010c0500[9]07050b01070103040005030407050a000705000500[6]03[19]0100[3]0500[18]0500[3]0500[18]0500[3]050604060406040604060406040604060406040604060406040500[3]050d050d050d050d050d050d050d050d050d050d050d050d05[2]00[3]050f050f050f050f050f050f050f050f050f050f050f050f05[2]00[3]0504[18]0500[3]050a010a010a010a010a010a010a010a010a010a010a010a010500[3]050d050d050d050d050d050d050d050d050d050d050d050d05[2]00[3]050901090109010901090109010901090109010901090109010500[3]0504[18]0500[3]05090e0c01090e0c01090e0c01090e0c01090e0c01090e0c010500[3]050f030b050f030b050f030b050f030b050f030b050f030b05[2]00[3]0507[3]0507[3]0507[3]0507[3]0507[3]0507[3]05[2]00[3]0504[18]0500[3]0500[18]0500[3]0500[18]0500[3]0500[7]0f00[10]0500[3]0500[18]0500[3]0500[18]0500[3]0500[18]0500[3]0500[2]0f[3]0e00[12]0500[3]0500[2]08090b0400[12]0500[3]0500[18]0500[3]0500[18]0500[1b]08090b0400[76]
 
 
-NameUndo=00[20]0f[61]0400[1d]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[e]03[2]00[e]0f[2]0100[d]0f[2]00[d]020f[3]0100[b]030f[2]0300[b]020f[5]00[a]02080a05040100[a]0f[6]00[a]0a0f[4]0500[a]0f[6]00[a]080f[4]0400[a]0f[6]00[b]080e0d0400[b]0f[6]00[8]02030c060f[2]090c030100[8]0f[6]00[7]0c0400[2]0a0f[2]0500[2]080c00[7]0f[6]00[b]0a0f[2]0500[b]0f[6]00[c]0c[2]00[c]0f[6]00[1a]0f[6]0100[18]020f[63]00[20]
+NameUndo=00[20]0f[61]0400[1c]080f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[1e]0f[2]00[e]03[2]00[e]0f[2]0100[d]0f[2]00[d]020f[3]0100[b]030f[2]0300[b]020f[5]00[a]02080a05040100[a]0f[6]00[a]0a0f[4]0500[a]0f[6]00[a]080f[4]0400[a]0f[6]00[b]080e0d0400[b]0f[6]00[8]02030c060f[2]090c030100[8]0f[6]00[7]080400[2]0a0f[2]0500[2]080c00[7]0f[6]00[b]0a0f[2]0500[b]0f[6]00[c]0c[2]00[c]0f[6]00[1a]0f[6]0100[18]020f[63]00[20]
 
 
 AttrTable=05[8]00[30]05[8]
@@ -331,14 +331,14 @@ MetatileSet_8x8_props=00[2000]
 MetatileSet_8x8_propsUndo=00[2000]
 
 
-MetatileSetLabels_2x2=Unlabeled,Unlabeled,Unlabeled,Unlabeled
-MetatileSetLabels_2x2Undo=Unlabeled,Unlabeled,Unlabeled,Unlabeled
+MetatileSetLabels_2x2=Unlabeled,Unlabeled,Unlabeled,Unlabeled
+MetatileSetLabels_2x2Undo=Unlabeled,Unlabeled,Unlabeled,Unlabeled
 
-MetatileSetLabels_4x4=Unlabeled,Unlabeled,Unlabeled,Unlabeled
-MetatileSetLabels_4x4Undo=Unlabeled,Unlabeled,Unlabeled,Unlabeled
+MetatileSetLabels_4x4=Unlabeled,Unlabeled,Unlabeled,Unlabeled
+MetatileSetLabels_4x4Undo=Unlabeled,Unlabeled,Unlabeled,Unlabeled
 
-MetatileSetLabels_8x8=Unlabeled,Unlabeled
-MetatileSetLabels_8x8Undo=Unlabeled,Unlabeled
+MetatileSetLabels_8x8=Unlabeled,Unlabeled
+MetatileSetLabels_8x8Undo=Unlabeled,Unlabeled
 
 CHRBankLabels=Unlabeled,Unlabeled,Unlabeled,Unlabeled
 
@@ -503,18 +503,18 @@ Checkpoint_MetatileSet_8x8_props=00[2000]
 Checkpoint_MetatileSet_8x8_propsUndo=00[2000]
 
 
-Checkpoint_MetatileSetLabels_2x2=Unlabeled,Unlabeled,Unlabeled,Unlabeled
-Checkpoint_MetatileSetLabels_2x2Undo=Unlabeled,Unlabeled,Unlabeled,Unlabeled
+Checkpoint_MetatileSetLabels_2x2=Unlabeled,Unlabeled,Unlabeled,Unlabeled
+Checkpoint_MetatileSetLabels_2x2Undo=Unlabeled,Unlabeled,Unlabeled,Unlabeled
 
-Checkpoint_MetatileSetLabels_4x4=Unlabeled,Unlabeled,Unlabeled,Unlabeled
-Checkpoint_MetatileSetLabels_4x4Undo=Unlabeled,Unlabeled,Unlabeled,Unlabeled
+Checkpoint_MetatileSetLabels_4x4=Unlabeled,Unlabeled,Unlabeled,Unlabeled
+Checkpoint_MetatileSetLabels_4x4Undo=Unlabeled,Unlabeled,Unlabeled,Unlabeled
 
-Checkpoint_MetatileSetLabels_8x8=Unlabeled,Unlabeled
-Checkpoint_MetatileSetLabels_8x8Undo=Unlabeled,Unlabeled
+Checkpoint_MetatileSetLabels_8x8=Unlabeled,Unlabeled
+Checkpoint_MetatileSetLabels_8x8Undo=Unlabeled,Unlabeled
 
-Checkpoint_CHRBankLabels=Unlabeled,Unlabeled,Unlabeled,Unlabeled
+Checkpoint_CHRBankLabels=Unlabeled,Unlabeled,Unlabeled,Unlabeled
 
-Checkpoint_CHRBankLabelsUndo=Unlabeled,Unlabeled,Unlabeled,Unlabeled
+Checkpoint_CHRBankLabelsUndo=Unlabeled,Unlabeled,Unlabeled,Unlabeled
 
 
 Checkpoint_32_NTSC_MsprDuration=00000006[100]
