@@ -58,20 +58,53 @@ ct SpriteDef[4] sdef_legr_up = SpriteDef[4](
     SpriteDef(Position($00,$00),$00) //unused
 )
 
+//sprite def for left arm in middle position
 ct SpriteDef[5] sdef_larm_m = SpriteDef[5](
     SpriteDef(Position($48,$9F),$0A),
     SpriteDef(Position($48,$97),$05),
     SpriteDef(Position($40,$8F),$0A),
-    SpriteDef(Position($44,$87),$0B),
-    SpriteDef(Position($3C,$87),$0E)
+    SpriteDef(Position($44,$8B),$0B),
+    SpriteDef(Position($3C,$8B),$0E)
 )
 
 ct SpriteDef[5] sdef_rarm_m = SpriteDef[5](
     SpriteDef(Position($B0,$9F),$05),
     SpriteDef(Position($B0,$97),$0A),
     SpriteDef(Position($B8,$8F),$05),
-    SpriteDef(Position($BC,$87),$0D),
-    SpriteDef(Position($B4,$87),$07)
+    SpriteDef(Position($BC,$8B),$0D),
+    SpriteDef(Position($B4,$8B),$07)
+)
+
+ct SpriteDef[5] sdef_larm_l = SpriteDef[5](
+    SpriteDef(Position($48,$A3),$06),
+    SpriteDef(Position($40,$9B),$06),
+    SpriteDef(Position($38,$93),$06),
+    SpriteDef(Position($34,$8F),$0B),
+    SpriteDef(Position($2C,$8F),$0E)
+)
+
+ct SpriteDef[5] sdef_rarm_l = SpriteDef[5](
+    SpriteDef(Position($AC,$9F),$04),
+    SpriteDef(Position($AC,$97),$05),
+    SpriteDef(Position($A4,$8F),$0A),
+    SpriteDef(Position($AC,$87),$0D),
+    SpriteDef(Position($A4,$87),$07)
+)
+
+ct SpriteDef[5] sdef_larm_r = SpriteDef[5](
+    SpriteDef(Position($4C,$9F),$08),
+    SpriteDef(Position($50,$97),$05),
+    SpriteDef(Position($50,$8F),$0A),
+    SpriteDef(Position($54,$87),$0B),
+    SpriteDef(Position($4C,$87),$0E)
+)
+
+ct SpriteDef[5] sdef_rarm_r = SpriteDef[5](
+    SpriteDef(Position($B0,$A3),$09),
+    SpriteDef(Position($B8,$9B),$09),
+    SpriteDef(Position($C0,$93),$09),
+    SpriteDef(Position($CC,$8F),$0D),
+    SpriteDef(Position($C4,$8F),$07)
 )
 
 fn update_sprites()
@@ -122,7 +155,18 @@ fn redraw_arms_and_legs()
             set_oam(SPR_RIGHT_LEG_3, sdef_legr_up[2].pos.x, sdef_legr_up[2].pos.y, sdef_legr_up[2].tile, 0)
             set_oam(SPR_RIGHT_LEG_4, sdef_legr_up[3].pos.x, sdef_legr_up[3].pos.y, sdef_legr_up[3].tile, 0)
 
-            //TODO draw arms on left
+            //draw arms on left
+            set_oam(SPR_LEFT_ARM_1, sdef_larm_l[0].pos.x, sdef_larm_l[0].pos.y, sdef_larm_l[0].tile, 0)
+            set_oam(SPR_LEFT_ARM_2, sdef_larm_l[1].pos.x, sdef_larm_l[1].pos.y, sdef_larm_l[1].tile, 0)
+            set_oam(SPR_LEFT_ARM_3, sdef_larm_l[2].pos.x, sdef_larm_l[2].pos.y, sdef_larm_l[2].tile, 0)
+            set_oam(SPR_LEFT_ARM_4, sdef_larm_l[3].pos.x, sdef_larm_l[3].pos.y, sdef_larm_l[3].tile, 0)
+            set_oam(SPR_LEFT_ARM_5, sdef_larm_l[4].pos.x, sdef_larm_l[4].pos.y, sdef_larm_l[4].tile, 0)
+
+            set_oam(SPR_RIGHT_ARM_1, sdef_rarm_l[0].pos.x, sdef_rarm_l[0].pos.y, sdef_rarm_l[0].tile, 0)
+            set_oam(SPR_RIGHT_ARM_2, sdef_rarm_l[1].pos.x, sdef_rarm_l[1].pos.y, sdef_rarm_l[1].tile, 0)
+            set_oam(SPR_RIGHT_ARM_3, sdef_rarm_l[2].pos.x, sdef_rarm_l[2].pos.y, sdef_rarm_l[2].tile, 0)
+            set_oam(SPR_RIGHT_ARM_4, sdef_rarm_l[3].pos.x, sdef_rarm_l[3].pos.y, sdef_rarm_l[3].tile, 0)
+            set_oam(SPR_RIGHT_ARM_5, sdef_rarm_l[4].pos.x, sdef_rarm_l[4].pos.y, sdef_rarm_l[4].tile, 0)
             break
         case ARMS_RIGHT
             //TODO draw left leg up and right leg down
@@ -137,6 +181,17 @@ fn redraw_arms_and_legs()
             set_oam(SPR_RIGHT_LEG_3, sdef_legr_dn[2].pos.x, sdef_legr_dn[2].pos.y, sdef_legr_dn[2].tile, 0)
             set_oam(SPR_RIGHT_LEG_4, sdef_legr_dn[3].pos.x, sdef_legr_dn[3].pos.y, sdef_legr_dn[3].tile, 0)
 
-            //TODO draw arms on right
+            //draw arms on right
+            set_oam(SPR_LEFT_ARM_1, sdef_larm_r[0].pos.x, sdef_larm_r[0].pos.y, sdef_larm_r[0].tile, 0)
+            set_oam(SPR_LEFT_ARM_2, sdef_larm_r[1].pos.x, sdef_larm_r[1].pos.y, sdef_larm_r[1].tile, 0)
+            set_oam(SPR_LEFT_ARM_3, sdef_larm_r[2].pos.x, sdef_larm_r[2].pos.y, sdef_larm_r[2].tile, 0)
+            set_oam(SPR_LEFT_ARM_4, sdef_larm_r[3].pos.x, sdef_larm_r[3].pos.y, sdef_larm_r[3].tile, 0)
+            set_oam(SPR_LEFT_ARM_5, sdef_larm_r[4].pos.x, sdef_larm_r[4].pos.y, sdef_larm_r[4].tile, 0)
+
+            set_oam(SPR_RIGHT_ARM_1, sdef_rarm_r[0].pos.x, sdef_rarm_r[0].pos.y, sdef_rarm_r[0].tile, 0)
+            set_oam(SPR_RIGHT_ARM_2, sdef_rarm_r[1].pos.x, sdef_rarm_r[1].pos.y, sdef_rarm_r[1].tile, 0)
+            set_oam(SPR_RIGHT_ARM_3, sdef_rarm_r[2].pos.x, sdef_rarm_r[2].pos.y, sdef_rarm_r[2].tile, 0)
+            set_oam(SPR_RIGHT_ARM_4, sdef_rarm_r[3].pos.x, sdef_rarm_r[3].pos.y, sdef_rarm_r[3].tile, 0)
+            set_oam(SPR_RIGHT_ARM_5, sdef_rarm_r[4].pos.x, sdef_rarm_r[4].pos.y, sdef_rarm_r[4].tile, 0)
             break
 

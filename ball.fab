@@ -51,8 +51,9 @@ struct Ball
     Position[12] positions //not a spritedef because we don't need sprite tile info - it's always the same for each ball
     U pos_count //ball 1 has 12 positions, ball 2 has 10, ball 3 has 8
     U current_pos //0-11 could be valid, 12 is 'disabled', anything else is nonsense
+    U going_left
 
 vars /vars_ball
-    Ball ball1 = Ball(ball1_positions, 12, BALL_POS_DISABLED)
-    Ball ball2 = Ball(ball2_positions, 10, BALL_POS_DISABLED)
-    Ball ball3 = Ball(ball3_positions, 8, BALL_POS_DISABLED)
+    Ball ball1 = Ball(ball1_positions, 12, BALL_POS_DISABLED, false)
+    Ball ball2 = Ball(ball2_positions, 10, BALL_POS_DISABLED, true)
+    Ball ball3 = Ball(ball3_positions, 8, BALL_POS_DISABLED, false)
