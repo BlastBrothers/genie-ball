@@ -66,15 +66,38 @@ vars /vars_ball
     U ball_timer = 0
     U current_ball = 1
 
+fn ball1_sfx()
+    //play sound on channel 1
+    //https://www.nesdev.org/wiki/APU#Pulse_($4000%E2%80%93$4007)
+    {$4000}(%10011101)
+    {$4002}($2A)
+    {$4003}(%00000000)
+
+fn ball2_sfx()
+    //play sound on channel 1
+    {$4000}(%00011111)
+    {$4002}($2B)
+    {$4003}(%00000000)
+
+//TODO increase score
+fn ball_hit_react()
+    //play sound on channel 2
+    //https://www.nesdev.org/wiki/APU#Pulse_($4000%E2%80%93$4007)
+    {$4004}(%0001111)
+    {$4005}(%10010000)
+    {$4006}($6A)
+    {$4007}($00000000) 
+
+    
 
 fn update_ball_state()
-    //If ball is at either lowest point, and hand is under it, change ball direction
-    if ball1.current_pos == 0 && arms_pos == ARMS_LEFT
+    //If ball is at either lowest point, heading down, and hand is under it, change ball direction
+    if ball1.current_pos == 0 && arms_pos == ARMS_LEFT && ball1.going_left == true
         ball1.going_left = false
-        //TODO play ball hit sfx
-    else if ball1.current_pos == 11 && arms_pos == ARMS_RIGHT
+        ball_hit_react()
+    else if ball1.current_pos == 11 && arms_pos == ARMS_RIGHT && ball1.going_left == false
         ball1.going_left = true
-        //TODO play ball hit sfx
+        ball_hit_react()
 
     //TODO ball 2 and 3 collision
 
@@ -84,6 +107,10 @@ fn update_ball_state()
         ball_timer = 20
     else
         ball_timer -= 1
+
+    //silence any prevous ball sfx
+    //They are all supposed to be only 1 frame long and this seemed like the easiest way.
+    {$4000}(%00010000)
 
     //maybe update current_ball. will go 1,2,1,2... in game a, and 1,2,3,1,2,3... in game b
     if ball_timer == 0
@@ -95,6 +122,8 @@ fn update_ball_state()
         //This is one area that would be a lot cleaner if we had an array of balls
         switch current_ball  
             case 1
+                ball1_sfx()
+
                 //move ball
                 if ball1.going_left
                     if ball1.current_pos == $00
