@@ -14,9 +14,9 @@ ct U[25] main_palette = U[25](
     $3D, $3D, $29,
 
     $3D, $3D, $0F, //sprites
+    $3D, $3D, $16,
     $3D, $3D, $11,
-    $3D, $3D, $00,
-    $3D, $3D, $29,
+    $3D, $3D, $1A,
 
     $3D //Backdrop color
 )
@@ -110,6 +110,7 @@ fn game_a_setup()
     ball2.going_left = true
 
     ball_timer = 0
+    current_ball = 1
 
 fn game_end(Bool on_left)
     game_state = GAME_STATE_END

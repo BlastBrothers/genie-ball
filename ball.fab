@@ -16,16 +16,16 @@ ct Position[12] ball1_positions = Position[12](
     Position($C4,$83),
 )
 ct Position[12] ball2_positions = Position[12](
-    Position(0,20),
-    Position(10,70),
-    Position(20,70),
-    Position(30,70),
-    Position(40,70),
-    Position(50,70),
-    Position(60,70),
-    Position(70,70),
-    Position(80,70),
-    Position(90,70),
+    Position($40,$7F),
+    Position($44,$6B),
+    Position($50,$57),
+    Position($5C,$47),
+    Position($70,$3B),
+    Position($84,$3B),
+    Position($98,$47),
+    Position($A4,$57),
+    Position($B0,$6B),
+    Position($B4,$7F),
     Position($FF,$FF), //unused
     Position($FF,$FF) //unused
 )
@@ -44,13 +44,14 @@ ct Position[12] ball3_positions = Position[12](
     Position($FF,$FF) //unused
 )
 
-ct U BALL_POS_DISABLED = 12
+ct U BALL1_MAGIC_NUM = 11 //one less than the number of valid positions; the arr index of last valid position
+ct U BALL2_MAGIC_NUM = 9
+ct U BALL3_MAGIC_NUM = 7
 
 struct Ball
     //balls have different numbers of positions, but we reserve 12 indices anyway. 
     //Somehow I doubt that Ball is RAM-heavy.
     Position[12] positions //not a spritedef because we don't need tile info - always the same for each ball
-    U pos_count //ball 1 has 12 positions, ball 2 has 10, ball 3 has 8
     U current_pos //$00-$0B are active positions; $FF is fall on left, $0C is fall on right; $FE is disabled
     U going_left
 
@@ -59,25 +60,12 @@ vars /vars_ball
     //Ideally these would be in an array. However nesfab does not support arrays of structs that contain arrays. 
     //I think the 'correct' way to do this would be to have an array of pointers to Ball struct instances.
     //But I don't want to mess with pointers right now. Easier in the short term to just copy-paste ball code
-    Ball ball1 = Ball(ball1_positions, 12, BALL_POS_DISABLED, false)
-    Ball ball2 = Ball(ball2_positions, 10, BALL_POS_DISABLED, true)
-    Ball ball3 = Ball(ball3_positions, 8, BALL_POS_DISABLED, false)
+    Ball ball1 = Ball(ball1_positions, 0, false)
+    Ball ball2 = Ball(ball2_positions, 0, true)
+    Ball ball3 = Ball(ball3_positions, 0, false)
 
     U ball_timer = 0
     U current_ball = 1
-
-fn ball1_sfx()
-    //play sound on channel 1
-    //https://www.nesdev.org/wiki/APU#Pulse_($4000%E2%80%93$4007)
-    {$4000}(%10011101)
-    {$4002}($2A)
-    {$4003}(%00000000)
-
-fn ball2_sfx()
-    //play sound on channel 1
-    {$4000}(%00011111)
-    {$4002}($2B)
-    {$4003}(%00000000)
 
 //TODO increase score
 fn ball_hit_react()
@@ -88,18 +76,23 @@ fn ball_hit_react()
     {$4006}($6A)
     {$4007}($00000000) 
 
-    
-
 fn update_ball_state()
     //If ball is at either lowest point, heading down, and hand is under it, change ball direction
     if ball1.current_pos == 0 && arms_pos == ARMS_LEFT && ball1.going_left == true
         ball1.going_left = false
         ball_hit_react()
-    else if ball1.current_pos == 11 && arms_pos == ARMS_RIGHT && ball1.going_left == false
+    else if ball1.current_pos == BALL1_MAGIC_NUM && arms_pos == ARMS_RIGHT && ball1.going_left == false
         ball1.going_left = true
         ball_hit_react()
 
-    //TODO ball 2 and 3 collision
+    if ball2.current_pos == 0 && arms_pos == ARMS_MIDDLE && ball2.going_left == true
+        ball2.going_left = false
+        ball_hit_react()
+    else if ball2.current_pos == BALL2_MAGIC_NUM && arms_pos == ARMS_MIDDLE && ball2.going_left == false
+        ball2.going_left = true
+        ball_hit_react()
+
+    //TODO ball 3 collision
 
     //increment ball timer
     //There is almost definitely a cleaner way to handle values wrapping around. But this is good enough.
@@ -122,8 +115,6 @@ fn update_ball_state()
         //This is one area that would be a lot cleaner if we had an array of balls
         switch current_ball  
             case 1
-                ball1_sfx()
-
                 //move ball
                 if ball1.going_left
                     if ball1.current_pos == $00
@@ -131,18 +122,33 @@ fn update_ball_state()
                     else
                         ball1.current_pos -= 1
                 else
-                    if ball1.current_pos == 11
+                    if ball1.current_pos == BALL1_MAGIC_NUM
                         game_end(false) //game ended with dropped ball on right 
                     else 
-                        ball1.current_pos += 1                     
+                        ball1.current_pos += 1     
+                //play sound on channel 1
+                //https://www.nesdev.org/wiki/APU#Pulse_($4000%E2%80%93$4007)
+                {$4000}(%10011101)
+                {$4002}($2A)
+                {$4003}(%00000000)                
                 break
             case 2
                 //move ball
-                // if ball2.going_left
-                //     ball2.current_pos -= 1
-                // else
-                //     ball2.current_pos += 1
-                //TODO
+                if ball2.going_left
+                    if ball2.current_pos == $00
+                        game_end(true) //game ended with dropped ball on left      
+                    else
+                        ball2.current_pos -= 1
+                else
+                    if ball2.current_pos == BALL2_MAGIC_NUM
+                        game_end(false) //game ended with dropped ball on right 
+                    else 
+                        ball2.current_pos += 1     
+                //play sound on channel 1
+                //https://www.nesdev.org/wiki/APU#Pulse_($4000%E2%80%93$4007)
+                {$4000}(%01011111)
+                {$4002}($3B)
+                {$4003}(%00000000) 
                 break
             case 3
                 break
