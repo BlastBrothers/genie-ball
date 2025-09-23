@@ -71,13 +71,24 @@ vars /vars_ball
 fn ball_hit_react()
     //play sound on channel 2
     //https://www.nesdev.org/wiki/APU#Pulse_($4000%E2%80%93$4007)
-    {$4004}(%0001111)
-    {$4005}(%10010000)
-    {$4006}($6A)
+    {$4004}(%1001111)
+    {$4006}($6C)
     {$4007}($00000000) 
 
 fn update_ball_state()
-    //If ball is at either lowest point, heading down, and hand is under it, change ball direction
+    //increment ball timer
+    //There is almost definitely a cleaner way to handle values wrapping around. But this is good enough.
+    if ball_timer == 0
+        ball_timer = 23 //TODO this value needs to change with score and game speed
+    else
+        ball_timer -= 1
+
+    //silence any prevous sfx
+    //They are all supposed to be only 1 frame long and this seemed like the easiest way.
+    {$4000}(%00010000)
+    {$4004}(%00010000)
+
+        //If ball is at either lowest point, heading down, and hand is under it, change ball direction
     if ball1.current_pos == 0 && arms_pos == ARMS_LEFT && ball1.going_left == true
         ball1.going_left = false
         ball_hit_react()
@@ -93,17 +104,6 @@ fn update_ball_state()
         ball_hit_react()
 
     //TODO ball 3 collision
-
-    //increment ball timer
-    //There is almost definitely a cleaner way to handle values wrapping around. But this is good enough.
-    if ball_timer == 0
-        ball_timer = 20
-    else
-        ball_timer -= 1
-
-    //silence any prevous ball sfx
-    //They are all supposed to be only 1 frame long and this seemed like the easiest way.
-    {$4000}(%00010000)
 
     //maybe update current_ball. will go 1,2,1,2... in game a, and 1,2,3,1,2,3... in game b
     if ball_timer == 0
@@ -128,8 +128,8 @@ fn update_ball_state()
                         ball1.current_pos += 1     
                 //play sound on channel 1
                 //https://www.nesdev.org/wiki/APU#Pulse_($4000%E2%80%93$4007)
-                {$4000}(%10011101)
-                {$4002}($2A)
+                {$4000}(%10011011)
+                {$4002}($35)
                 {$4003}(%00000000)                
                 break
             case 2
@@ -146,8 +146,8 @@ fn update_ball_state()
                         ball2.current_pos += 1     
                 //play sound on channel 1
                 //https://www.nesdev.org/wiki/APU#Pulse_($4000%E2%80%93$4007)
-                {$4000}(%01011111)
-                {$4002}($3B)
+                {$4000}(%01011101)
+                {$4002}($57)
                 {$4003}(%00000000) 
                 break
             case 3
