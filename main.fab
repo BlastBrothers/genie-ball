@@ -33,7 +33,9 @@ ct U ARMS_RIGHT = 2
 vars /vars_main
     //nesfab has a 'mode' syntax but I don't feel like messing with that right now.
     // see GAME_STATE_ consts for details
-    U game_state = 0
+    U game_state = GAME_STATE_IDLE
+    Bool fallen_ball_is_on_left = false //used for drawing the 'dropped ball' graphic when a game ends
+    U game_end_timer = 0
 
     //Where player's arms are. See ARMS_ consts for details
     U arms_pos = ARMS_MIDDLE
@@ -101,39 +103,63 @@ nmi main_nmi()
 
 fn game_a_setup()
     arms_pos = ARMS_LEFT
+    ball1.current_pos = 0
+    ball1.going_left = false
+
+    ball2.current_pos = 9
+    ball2.going_left = true
+
+    ball_timer = 0
+
+fn game_end(Bool on_left)
+    game_state = GAME_STATE_END
+    fallen_ball_is_on_left = on_left
+    game_end_timer = 120
+
+fn process_movement()
+    if pads[0].pressed & BUTTON_LEFT
+        if arms_pos == ARMS_RIGHT
+            arms_pos = ARMS_MIDDLE
+        else
+            arms_pos = ARMS_LEFT
+    if pads[0].pressed & BUTTON_RIGHT
+        if arms_pos == ARMS_LEFT
+            arms_pos = ARMS_MIDDLE
+        else
+            arms_pos = ARMS_RIGHT
 
 mode main()
 : nmi main_nmi
     init()
     while true
         update_pads()
-        //TODO if start is held but not released, draw high score
-        //TODO if select is pressed, toggle between game A and game B
-
-        if pads[0].released & BUTTON_START
-            game_a_setup()
-            game_state = GAME_STATE_GAMEA
 
         switch game_state
             case GAME_STATE_IDLE
+                //TODO clear score display
+                //TODO clear dropped ball GFX
+                //TODO if start is held but not released, draw high score
+                //TODO if select is pressed, toggle between game A and game B
+
+                if pads[0].released & BUTTON_START
+                    game_a_setup()
+                    game_state = GAME_STATE_GAMEA
                 break
             case GAME_STATE_GAMEA
-                if pads[0].pressed & BUTTON_LEFT
-                    if arms_pos == ARMS_RIGHT
-                        arms_pos = ARMS_MIDDLE
-                    else
-                        arms_pos = ARMS_LEFT
-                if pads[0].pressed & BUTTON_RIGHT
-                    if arms_pos == ARMS_LEFT
-                        arms_pos = ARMS_MIDDLE
-                    else
-                        arms_pos = ARMS_RIGHT
+                process_movement()
+                update_ball_state()
+                
                 break
             case GAME_STATE_GAMEB
                 //TODO
                 break
             case GAME_STATE_END
-                //TODO
+                process_movement()
+                //TODO draw dropped ball graphix
+                if game_end_timer == 0
+                    game_state = GAME_STATE_IDLE
+                else 
+                    game_end_timer -= 1
                 break
         nmi
 

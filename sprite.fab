@@ -1,24 +1,30 @@
 //misc sprite stuff
 
 //this game uses few enough sprites that I can dedicate sprite indices to specific things.
-ct U SPR_LEFT_LEG_1 =     $08
-ct U SPR_LEFT_LEG_2 =     $0C
-ct U SPR_LEFT_LEG_3 =     $10
-ct U SPR_LEFT_LEG_4 =     $14
-ct U SPR_RIGHT_LEG_1 =    $18
-ct U SPR_RIGHT_LEG_2 =    $1C
-ct U SPR_RIGHT_LEG_3 =    $20
-ct U SPR_RIGHT_LEG_4 =    $24
-ct U SPR_LEFT_ARM_1 =     $28
-ct U SPR_LEFT_ARM_2 =     $2C
-ct U SPR_LEFT_ARM_3 =     $30
-ct U SPR_LEFT_ARM_4 =     $34
-ct U SPR_LEFT_ARM_5 =     $38
-ct U SPR_RIGHT_ARM_1 =    $3C
-ct U SPR_RIGHT_ARM_2 =    $40
-ct U SPR_RIGHT_ARM_3 =    $44
-ct U SPR_RIGHT_ARM_4 =    $48
-ct U SPR_RIGHT_ARM_5 =    $4C
+ct U SPR_LEFT_LEG_1 =     $00
+ct U SPR_LEFT_LEG_2 =     $04
+ct U SPR_LEFT_LEG_3 =     $08
+ct U SPR_LEFT_LEG_4 =     $0C
+ct U SPR_RIGHT_LEG_1 =    $10
+ct U SPR_RIGHT_LEG_2 =    $14
+ct U SPR_RIGHT_LEG_3 =    $18
+ct U SPR_RIGHT_LEG_4 =    $1C
+ct U SPR_LEFT_ARM_1 =     $20
+ct U SPR_LEFT_ARM_2 =     $24
+ct U SPR_LEFT_ARM_3 =     $28
+ct U SPR_LEFT_ARM_4 =     $2C
+ct U SPR_LEFT_ARM_5 =     $30
+ct U SPR_RIGHT_ARM_1 =    $34
+ct U SPR_RIGHT_ARM_2 =    $38
+ct U SPR_RIGHT_ARM_3 =    $3C
+ct U SPR_RIGHT_ARM_4 =    $40
+ct U SPR_RIGHT_ARM_5 =    $44
+ct U SPR_BALL1_1 =        $48
+ct U SPR_BALL1_2 =        $4C
+ct U SPR_BALL2_1 =        $50
+ct U SPR_BALL2_2 =        $54
+ct U SPR_BALL3_1 =        $58
+ct U SPR_BALL3_2 =        $5C
 
 struct Position 
     U x
@@ -108,8 +114,9 @@ ct SpriteDef[5] sdef_rarm_r = SpriteDef[5](
 )
 
 fn update_sprites()
-    //if game_state != GAME_STATE_IDLE
-    redraw_arms_and_legs()
+    if game_state != GAME_STATE_IDLE
+        redraw_arms_and_legs()
+        redraw_balls()
 
 //The arms and legs are drawn with sprites. 
 //Sprite positions are redrawn each frame for no reason other than it being the easiest way to do it.
@@ -169,7 +176,7 @@ fn redraw_arms_and_legs()
             set_oam(SPR_RIGHT_ARM_5, sdef_rarm_l[4].pos.x, sdef_rarm_l[4].pos.y, sdef_rarm_l[4].tile, 0)
             break
         case ARMS_RIGHT
-            //TODO draw left leg up and right leg down
+            //draw left leg up and right leg down
             //index, x, y, pal+tile, flags
             set_oam(SPR_LEFT_LEG_1, sdef_legl_up[0].pos.x, sdef_legl_up[0].pos.y, sdef_legl_up[0].tile, 0)
             set_oam(SPR_LEFT_LEG_2, sdef_legl_up[1].pos.x, sdef_legl_up[1].pos.y, sdef_legl_up[1].tile, 0)
@@ -195,3 +202,22 @@ fn redraw_arms_and_legs()
             set_oam(SPR_RIGHT_ARM_5, sdef_rarm_r[4].pos.x, sdef_rarm_r[4].pos.y, sdef_rarm_r[4].tile, 0)
             break
 
+//balls are also sprites.
+fn redraw_balls()
+    if game_state == GAME_STATE_END
+        set_oam(SPR_BALL1_1, 0, 0, 0, 0)
+        set_oam(SPR_BALL1_2, 0, 0, 0, 0)
+        set_oam(SPR_BALL2_1, 0, 0, 0, 0)
+        set_oam(SPR_BALL2_2, 0, 0, 0, 0)
+        set_oam(SPR_BALL3_1, 0, 0, 0, 0)
+        set_oam(SPR_BALL3_2, 0, 0, 0, 0)
+    else
+        set_oam(SPR_BALL1_1, ball1_positions[ball1.current_pos].x, ball1_positions[ball1.current_pos].y, $0B, 0)
+        set_oam(SPR_BALL1_2, ball1_positions[ball1.current_pos].x+4, ball1_positions[ball1.current_pos].y+4, $0D, 0)
+
+        set_oam(SPR_BALL2_1, ball2_positions[ball2.current_pos].x, ball2_positions[ball2.current_pos].y, $0B, 1)
+        set_oam(SPR_BALL2_2, ball2_positions[ball2.current_pos].x+4, ball2_positions[ball2.current_pos].y+4, $0D, 1)
+
+        set_oam(SPR_BALL3_1, ball3_positions[ball3.current_pos].x, ball3_positions[ball3.current_pos].y, $01, 3)
+        set_oam(SPR_BALL3_2, ball3_positions[ball3.current_pos].x+4, ball3_positions[ball3.current_pos].y+4, $04, 3)
+        
