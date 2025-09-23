@@ -75,6 +75,11 @@ fn ball_hit_react()
     {$4006}($6C)
     {$4007}($00000000) 
 
+    if game_state == GAME_STATE_GAMEA
+        score += 1
+    else 
+        score += 10
+
 fn update_ball_state()
     //increment ball timer
     //There is almost definitely a cleaner way to handle values wrapping around. But this is good enough.

@@ -21,6 +21,29 @@ ct U[25] main_palette = U[25](
     $3D //Backdrop color
 )
 
+//for drawing the score to the screen
+
+struct ScoreDigit
+    U tile1 //six separate vars to get around prohibition on nested arrays
+    U tile2 //Drawn to screen like this:
+    U tile3 // 1 2
+    U tile4 // 3 4
+    U tile5 // 5 6
+    U tile6
+
+ct ScoreDigit[10] digits_tiles = ScoreDigit[10](
+    ScoreDigit($A, $E, $A, $A, $8, $C), //0
+    ScoreDigit($0, $A, $0, $A, $0, $8), //1
+    ScoreDigit($8, $E, $A, $C, $8, $C), //2
+    ScoreDigit($8, $E, $0, $E, $8, $C), //3
+    ScoreDigit($A, $A, $8, $E, $0, $8), //4
+    ScoreDigit($A, $C, $8, $E, $8, $C), //5
+    ScoreDigit($A, $C, $A, $E, $8, $C), //6
+    ScoreDigit($8, $E, $0, $A, $0, $8), //7
+    ScoreDigit($A, $E, $A, $E, $8, $C), //8
+    ScoreDigit($A, $E, $8, $E, $8, $C)  //9
+)
+
 ct U GAME_STATE_IDLE = 0
 ct U GAME_STATE_GAMEA = 1
 ct U GAME_STATE_GAMEB = 2
@@ -36,6 +59,9 @@ vars /vars_main
     U game_state = GAME_STATE_IDLE
     Bool fallen_ball_is_on_left = false //used for drawing the 'dropped ball' graphic when a game ends
     U game_end_timer = 0
+    UU score = 0
+    UU highscore_gamea = 0
+    UU highscore_gameb = 0
 
     //Where player's arms are. See ARMS_ consts for details
     U arms_pos = ARMS_MIDDLE
@@ -90,12 +116,14 @@ fn init()
 
 nmi main_nmi()
     ppu_upload_oam_poll_pads(0)
-    ppu_reset_scroll(0, 0)
-
     //disable rendering
     {PPUMASK}(0)
 
     update_sprites()
+    if game_state == GAME_STATE_GAMEA || game_state == GAME_STATE_GAMEB
+        draw_score()
+    
+    ppu_reset_scroll(0, 0)
 
     //re-enable rendering
     {PPUMASK}(ppumask_mirror)
@@ -111,8 +139,13 @@ fn game_a_setup()
 
     ball_timer = 0
     current_ball = 1
+    score = 0
 
 fn game_end(Bool on_left)
+    if game_state == GAME_STATE_GAMEA && score > highscore_gamea
+        highscore_gamea = score
+    if game_state == GAME_STATE_GAMEB && score > highscore_gameb
+        highscore_gameb = score
     game_state = GAME_STATE_END
     fallen_ball_is_on_left = on_left
     game_end_timer = 120
@@ -128,6 +161,22 @@ fn process_movement()
             arms_pos = ARMS_MIDDLE
         else
             arms_pos = ARMS_RIGHT
+
+fn draw_score()
+    //TODO draw multiple digits
+    draw_digit_at_offset(score.a,$20BC)
+
+fn draw_digit_at_offset(U digit, UU offset)
+    ppu_set_addr(offset)
+    {PPUDATA}(digits_tiles[digit].tile1)
+    {PPUDATA}(digits_tiles[digit].tile2)
+    ppu_set_addr(offset + $20)
+    {PPUDATA}(digits_tiles[digit].tile3)
+    {PPUDATA}(digits_tiles[digit].tile4)
+    ppu_set_addr(offset + $40)
+    {PPUDATA}(digits_tiles[digit].tile5)
+    {PPUDATA}(digits_tiles[digit].tile6)
+
 
 mode main()
 : nmi main_nmi
