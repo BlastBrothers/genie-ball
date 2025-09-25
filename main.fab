@@ -31,7 +31,7 @@ struct ScoreDigit
     U tile5 // 5 6
     U tile6
 
-ct ScoreDigit[10] digits_tiles = ScoreDigit[10](
+ct ScoreDigit[11] digits_tiles = ScoreDigit[11](
     ScoreDigit($A, $E, $A, $A, $8, $C), //0
     ScoreDigit($0, $A, $0, $A, $0, $8), //1
     ScoreDigit($8, $E, $A, $C, $8, $C), //2
@@ -41,7 +41,8 @@ ct ScoreDigit[10] digits_tiles = ScoreDigit[10](
     ScoreDigit($A, $C, $A, $E, $8, $C), //6
     ScoreDigit($8, $E, $0, $A, $0, $8), //7
     ScoreDigit($A, $E, $A, $E, $8, $C), //8
-    ScoreDigit($A, $E, $8, $E, $8, $C)  //9
+    ScoreDigit($A, $E, $8, $E, $8, $C), //9
+    ScoreDigit($0, $0, $0, $0, $0, $0)  //Blank
 )
 
 ct U GAME_STATE_IDLE = 0
@@ -163,8 +164,27 @@ fn process_movement()
             arms_pos = ARMS_RIGHT
 
 fn draw_score()
-    //TODO draw multiple digits
-    draw_digit_at_offset(score.a,$20BC)
+    U[5] score_digits = uu_to_ddddd(score)
+
+    //draw 4 digits of score without leading zeroes
+    //TODO the number of if statements can be easily cut down. 
+    //But will I bother before the deadline? Only time will tell.
+    if score_digits[3] == 0
+        draw_digit_at_offset(10,$20B6)
+    else
+        draw_digit_at_offset(score_digits[3],$20B6)
+    if score_digits[2] == 0 && score_digits[3] == 0
+        draw_digit_at_offset(10,$20B8)
+    else
+        draw_digit_at_offset(score_digits[2],$20B8)
+    if score_digits[1] == 0 && score_digits[2] == 0 && score_digits[3] == 0
+        draw_digit_at_offset(10,$20BA)
+    else
+        draw_digit_at_offset(score_digits[1],$20BA)
+
+    draw_digit_at_offset(score_digits[0],$20BC)
+    
+    //draw_digit_at_offset(score_digits[4],$20B4)
 
 fn draw_digit_at_offset(U digit, UU offset)
     ppu_set_addr(offset)
