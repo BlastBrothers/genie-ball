@@ -1,6 +1,5 @@
 //ball handling
 
-//TODO un-placeholderize these
 ct Position[12] ball1_positions = Position[12](
     Position($30,$83),
     Position($34,$6F),
@@ -55,6 +54,25 @@ struct Ball
     U current_pos //$00-$0B are active positions; $FF is fall on left, $0C is fall on right; $FE is disabled
     U going_left
 
+//for handling the gradual speedup as the game progresses
+//Not sure what the best name for this is. It's very abstract.
+struct Timing
+    U speed
+    UU points_thresh //The number of points scored before moving on to the next speed
+
+ct Timing[8] game_a_timings = Timing[8](
+    Timing(23, 5),
+    Timing(19, 5),
+    Timing(15, 10),
+    Timing(14, 10),
+    Timing(13, 20),
+    Timing(12, 20),
+    Timing(11, 10),
+    Timing(10, 20)
+)
+
+//TODO gameb_timings
+
 vars /vars_ball
 
     //Ideally these would be in an array. However nesfab does not support arrays of structs that contain arrays. 
@@ -66,25 +84,30 @@ vars /vars_ball
 
     U ball_timer = 0
     U current_ball = 1
+    UU speedup_thresh = 0
+    U timings_index = 0
 
-//TODO increase score
-fn ball_hit_react()
-    //play sound on channel 2
-    //https://www.nesdev.org/wiki/APU#Pulse_($4000%E2%80%93$4007)
-    {$4004}(%1001111)
-    {$4006}($6C)
-    {$4007}($00000000) 
+fn game_a_setup()
+    arms_pos = ARMS_LEFT
 
-    if game_state == GAME_STATE_GAMEA
-        score += 1
-    else 
-        score += 10
+    ball1.current_pos = 0
+    ball1.going_left = false
+
+    ball2.current_pos = 9
+    ball2.going_left = true
+
+    ball_timer = 0
+    current_ball = 1
+    
+    score = 0
+    timings_index = 0
+    speedup_thresh = game_a_timings[timings_index].points_thresh
 
 fn update_ball_state()
     //increment ball timer
     //There is almost definitely a cleaner way to handle values wrapping around. But this is good enough.
     if ball_timer == 0
-        ball_timer = 23 //TODO this value needs to change with score and game speed
+        ball_timer = game_a_timings[timings_index].speed
     else
         ball_timer -= 1
 
@@ -157,3 +180,23 @@ fn update_ball_state()
                 break
             case 3
                 break
+
+fn ball_hit_react()
+    //play sound on channel 2
+    //https://www.nesdev.org/wiki/APU#Pulse_($4000%E2%80%93$4007)
+    {$4004}(%1001111)
+    {$4006}($6C)
+    {$4007}($00000000) 
+
+    if game_state == GAME_STATE_GAMEA
+        score += 1
+        speedup_thresh -= 1
+    else 
+        score += 10
+        speedup_thresh -= 10
+
+    if speedup_thresh == 0
+        timings_index += 1
+        if timings_index == len(game_a_timings)
+            timings_index = 0
+        speedup_thresh = game_a_timings[timings_index].points_thresh
