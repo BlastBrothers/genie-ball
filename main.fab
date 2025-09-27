@@ -30,7 +30,7 @@ struct ScoreDigit
     U tile5 // 5 6
     U tile6
 
-ct ScoreDigit[11] digits_tiles = ScoreDigit[11](
+ct ScoreDigit[13] digits_tiles = ScoreDigit[13](
     ScoreDigit($A, $E, $A, $A, $8, $C), //0
     ScoreDigit($0, $A, $0, $A, $0, $8), //1
     ScoreDigit($8, $E, $A, $C, $8, $C), //2
@@ -41,6 +41,8 @@ ct ScoreDigit[11] digits_tiles = ScoreDigit[11](
     ScoreDigit($8, $E, $0, $A, $0, $8), //7
     ScoreDigit($A, $E, $A, $E, $8, $C), //8
     ScoreDigit($A, $E, $8, $E, $8, $C), //9
+    ScoreDigit($2, $6, $A, $E, $8, $8), //A
+    ScoreDigit($A, $6, $A, $6, $8, $4), //B
     ScoreDigit($0, $0, $0, $0, $0, $0)  //Blank
 )
 
@@ -124,6 +126,10 @@ nmi main_nmi()
     if game_state == GAME_STATE_GAMEA || game_state == GAME_STATE_GAMEB
         draw_score()
     
+    if game_state == GAME_STATE_IDLE
+        draw_score()
+        draw_game_select()
+    
     ppu_reset_scroll(0, 0)
 
     //re-enable rendering
@@ -158,21 +164,24 @@ fn draw_score()
     //TODO the number of if statements can be easily cut down. 
     //But will I bother before the deadline? Only time will tell.
     if score_digits[3] == 0
-        draw_digit_at_offset(10,$20B6)
+        draw_digit_at_offset(12,$20B6)
     else
         draw_digit_at_offset(score_digits[3],$20B6)
     if score_digits[2] == 0 && score_digits[3] == 0
-        draw_digit_at_offset(10,$20B8)
+        draw_digit_at_offset(12,$20B8)
     else
         draw_digit_at_offset(score_digits[2],$20B8)
     if score_digits[1] == 0 && score_digits[2] == 0 && score_digits[3] == 0
-        draw_digit_at_offset(10,$20BA)
+        draw_digit_at_offset(12,$20BA)
     else
         draw_digit_at_offset(score_digits[1],$20BA)
 
     draw_digit_at_offset(score_digits[0],$20BC)
     
     //draw_digit_at_offset(score_digits[4],$20B4)
+
+    //blank out A/B select
+    draw_digit_at_offset(12,$20A2)
 
 fn draw_digit_at_offset(U digit, UU offset)
     ppu_set_addr(offset)
@@ -185,6 +194,12 @@ fn draw_digit_at_offset(U digit, UU offset)
     {PPUDATA}(digits_tiles[digit].tile5)
     {PPUDATA}(digits_tiles[digit].tile6)
 
+fn draw_game_select()
+    if will_be_game_a
+        draw_digit_at_offset(10,$20A2)
+    else
+        draw_digit_at_offset(11,$20A2)
+
 
 mode main()
 : nmi main_nmi
@@ -194,12 +209,18 @@ mode main()
 
         switch game_state
             case GAME_STATE_IDLE
-                //TODO clear score display
                 //TODO clear dropped ball GFX
-                //TODO if start is held but not released, draw high score
-                //TODO if select is pressed, toggle between game A and game B
+                
+                //if select is pressed, toggle between game A and game B
                 if pads[0].pressed & BUTTON_SELECT
                     will_be_game_a = !will_be_game_a
+
+                //if start is held but not released, draw high score
+                if pads[0].held & BUTTON_START
+                    if will_be_game_a
+                        score = highscore_gamea
+                    else
+                        score = highscore_gameb
 
                 if pads[0].released & BUTTON_START
                     if will_be_game_a
@@ -219,6 +240,7 @@ mode main()
                 //TODO draw dropped ball graphix
                 if game_end_timer == 0
                     game_state = GAME_STATE_IDLE
+                    score = 0
                 else 
                     game_end_timer -= 1
                 break
