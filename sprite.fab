@@ -218,6 +218,6 @@ fn redraw_balls()
         set_oam(SPR_BALL2_1, ball2_positions[ball2.current_pos].x, ball2_positions[ball2.current_pos].y, $0B, 2)
         set_oam(SPR_BALL2_2, ball2_positions[ball2.current_pos].x+4, ball2_positions[ball2.current_pos].y+4, $0D, 2)
 
-        set_oam(SPR_BALL3_1, ball3_positions[ball3.current_pos].x, ball3_positions[ball3.current_pos].y, $01, 3)
-        set_oam(SPR_BALL3_2, ball3_positions[ball3.current_pos].x+4, ball3_positions[ball3.current_pos].y+4, $04, 3)
+        set_oam(SPR_BALL3_1, ball3_positions[ball3.current_pos].x, ball3_positions[ball3.current_pos].y, $0B, 3)
+        set_oam(SPR_BALL3_2, ball3_positions[ball3.current_pos].x+4, ball3_positions[ball3.current_pos].y+4, $0D, 3)
         

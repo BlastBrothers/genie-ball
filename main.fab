@@ -62,6 +62,7 @@ vars /vars_main
     UU score = 0
     UU highscore_gamea = 0
     UU highscore_gameb = 0
+    Bool will_be_game_a = true //used only for tracking whether game a or game b will happen after a start press
 
     //Where player's arms are. See ARMS_ consts for details
     U arms_pos = ARMS_MIDDLE
@@ -197,18 +198,21 @@ mode main()
                 //TODO clear dropped ball GFX
                 //TODO if start is held but not released, draw high score
                 //TODO if select is pressed, toggle between game A and game B
+                if pads[0].pressed & BUTTON_SELECT
+                    will_be_game_a = !will_be_game_a
 
                 if pads[0].released & BUTTON_START
-                    game_a_setup()
-                    game_state = GAME_STATE_GAMEA
+                    if will_be_game_a
+                        game_a_setup()
+                        game_state = GAME_STATE_GAMEA
+                    else 
+                        game_b_setup()
+                        game_state = GAME_STATE_GAMEB
                 break
             case GAME_STATE_GAMEA
-                process_movement()
-                update_ball_state()
-                
-                break
             case GAME_STATE_GAMEB
-                //TODO
+                process_movement()
+                update_balls()
                 break
             case GAME_STATE_END
                 process_movement()

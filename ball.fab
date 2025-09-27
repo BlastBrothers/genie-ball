@@ -29,14 +29,14 @@ ct Position[12] ball2_positions = Position[12](
     Position($FF,$FF) //unused
 )
 ct Position[12] ball3_positions = Position[12](
-    Position($FF,$FF),
-    Position($FF,$FF),
-    Position($FF,$FF),
-    Position($FF,$FF),
-    Position($FF,$FF),
-    Position($FF,$FF),
-    Position($FF,$FF),
-    Position($FF,$FF),
+    Position($50,$7B),
+    Position($54,$6B),
+    Position($60,$5B),
+    Position($70,$4F),
+    Position($84,$4F),
+    Position($94,$5B),
+    Position($A0,$6B),
+    Position($A4,$7B),
     Position($FF,$FF), //unused
     Position($FF,$FF), //unused
     Position($FF,$FF), //unused
@@ -71,8 +71,20 @@ ct Timing[8] game_a_timings = Timing[8](
     Timing(10, 20)
 )
 
-//TODO gameb_timings
-
+ct Timing[12] game_b_timings = Timing[12](
+    Timing(13, 200),
+    Timing(12, 200),
+    Timing(11, 100),
+    Timing(10, 200),
+    Timing(9, 200),
+    Timing(8, 100),
+    Timing(7, 200),
+    Timing(6, 200),
+    Timing(5, 100),
+    Timing(4, 200),
+    Timing(3, 200),
+    Timing(2, 100)
+)
 vars /vars_ball
 
     //Ideally these would be in an array. However nesfab does not support arrays of structs that contain arrays. 
@@ -96,6 +108,9 @@ fn game_a_setup()
     ball2.current_pos = 9
     ball2.going_left = true
 
+    ball3.current_pos = 11 //hide it
+    ball3.going_left = true
+
     ball_timer = 0
     current_ball = 1
     
@@ -103,11 +118,33 @@ fn game_a_setup()
     timings_index = 0
     speedup_thresh = game_a_timings[timings_index].points_thresh
 
-fn update_ball_state()
+fn game_b_setup()
+    arms_pos = ARMS_LEFT
+
+    ball1.current_pos = 0
+    ball1.going_left = false
+
+    ball2.current_pos = 9
+    ball2.going_left = true
+
+    ball3.current_pos = 0
+    ball3.going_left = false
+
+    ball_timer = 0
+    current_ball = 1
+    
+    score = 0
+    timings_index = 0
+    speedup_thresh = game_b_timings[timings_index].points_thresh
+
+fn update_balls()
     //increment ball timer
     //There is almost definitely a cleaner way to handle values wrapping around. But this is good enough.
     if ball_timer == 0
-        ball_timer = game_a_timings[timings_index].speed
+        if game_state == GAME_STATE_GAMEA
+            ball_timer = game_a_timings[timings_index].speed
+        else
+            ball_timer = game_b_timings[timings_index].speed
     else
         ball_timer -= 1
 
@@ -131,7 +168,13 @@ fn update_ball_state()
         ball2.going_left = true
         ball_hit_react()
 
-    //TODO ball 3 collision
+    if ball3.current_pos == 0 && arms_pos == ARMS_RIGHT && ball3.going_left == true
+        ball3.going_left = false
+        ball_hit_react()
+    else if ball3.current_pos == BALL3_MAGIC_NUM && arms_pos == ARMS_LEFT && ball3.going_left == false
+        ball3.going_left = true
+        ball_hit_react()
+
 
     //maybe update current_ball. will go 1,2,1,2... in game a, and 1,2,3,1,2,3... in game b
     if ball_timer == 0
@@ -179,7 +222,24 @@ fn update_ball_state()
                 {$4003}(%00000000) 
                 break
             case 3
+                //move ball
+                if ball3.going_left
+                    if ball3.current_pos == $00
+                        game_end(true) //game ended with dropped ball on left      
+                    else
+                        ball3.current_pos -= 1
+                else
+                    if ball3.current_pos == BALL3_MAGIC_NUM
+                        game_end(false) //game ended with dropped ball on right 
+                    else 
+                        ball3.current_pos += 1     
+                //play sound on channel 1
+                //https://www.nesdev.org/wiki/APU#Pulse_($4000%E2%80%93$4007)
+                {$4000}(%01011101)
+                {$4002}($46)
+                {$4003}(%00000000) 
                 break
+                
 
 fn ball_hit_react()
     //play sound on channel 2
@@ -191,12 +251,16 @@ fn ball_hit_react()
     if game_state == GAME_STATE_GAMEA
         score += 1
         speedup_thresh -= 1
+        if speedup_thresh == 0
+            timings_index += 1
+            if timings_index == len(game_a_timings)
+                timings_index = 0
+            speedup_thresh = game_a_timings[timings_index].points_thresh
     else 
         score += 10
         speedup_thresh -= 10
-
-    if speedup_thresh == 0
-        timings_index += 1
-        if timings_index == len(game_a_timings)
-            timings_index = 0
-        speedup_thresh = game_a_timings[timings_index].points_thresh
+        if speedup_thresh == 0
+            timings_index += 1
+            if timings_index == len(game_b_timings)
+                timings_index = 0
+            speedup_thresh = game_b_timings[timings_index].points_thresh
