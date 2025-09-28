@@ -46,6 +46,21 @@ ct ScoreDigit[13] digits_tiles = ScoreDigit[13](
     ScoreDigit($0, $0, $0, $0, $0, $0)  //Blank
 )
 
+//5x4 rectangle
+ct U[20] crash_left_tiles = U[20](
+    $02,$01,$00,$00,$00,
+    $0D,$02,$0A,$02,$01,
+    $00,$00,$07,$05,$02,
+    $00,$08,$00,$04,$0D
+)
+
+ct U[20] crash_right_tiles = U[20](
+    $00,$00,$00,$02,$01,
+    $00,$08,$03,$01,$0E,
+    $00,$0E,$0B,$01,$00,
+    $0E,$01,$04,$00,$00
+)
+
 ct U GAME_STATE_IDLE = 0
 ct U GAME_STATE_GAMEA = 1
 ct U GAME_STATE_GAMEB = 2
@@ -129,6 +144,120 @@ nmi main_nmi()
     if game_state == GAME_STATE_IDLE
         draw_score()
         draw_game_select()
+        //clear fallen ball graphics
+        ppu_set_addr($22C5)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+
+        ppu_set_addr($22E5)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+
+        ppu_set_addr($2305)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+
+        ppu_set_addr($2325)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+
+        ppu_set_addr($22D6)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+
+        ppu_set_addr($22F6)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+
+        ppu_set_addr($2316)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+
+        ppu_set_addr($2336)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+        {PPUDATA}($00)
+
+    if game_state == GAME_STATE_END
+        if fallen_ball_is_on_left
+            ppu_set_addr($22C5)
+            {PPUDATA}(crash_left_tiles[0])
+            {PPUDATA}(crash_left_tiles[1])
+            {PPUDATA}(crash_left_tiles[2])
+            {PPUDATA}(crash_left_tiles[3])
+            {PPUDATA}(crash_left_tiles[4])
+
+            ppu_set_addr($22E5)
+            {PPUDATA}(crash_left_tiles[5])
+            {PPUDATA}(crash_left_tiles[6])
+            {PPUDATA}(crash_left_tiles[7])
+            {PPUDATA}(crash_left_tiles[8])
+            {PPUDATA}(crash_left_tiles[9])
+
+            ppu_set_addr($2305)
+            {PPUDATA}(crash_left_tiles[10])
+            {PPUDATA}(crash_left_tiles[11])
+            {PPUDATA}(crash_left_tiles[12])
+            {PPUDATA}(crash_left_tiles[13])
+            {PPUDATA}(crash_left_tiles[14])
+
+            ppu_set_addr($2325)
+            {PPUDATA}(crash_left_tiles[15])
+            {PPUDATA}(crash_left_tiles[16])
+            {PPUDATA}(crash_left_tiles[17])
+            {PPUDATA}(crash_left_tiles[18])
+            {PPUDATA}(crash_left_tiles[19])
+        else
+            ppu_set_addr($22D6)
+            {PPUDATA}(crash_right_tiles[0])
+            {PPUDATA}(crash_right_tiles[1])
+            {PPUDATA}(crash_right_tiles[2])
+            {PPUDATA}(crash_right_tiles[3])
+            {PPUDATA}(crash_right_tiles[4])
+
+            ppu_set_addr($22F6)
+            {PPUDATA}(crash_right_tiles[5])
+            {PPUDATA}(crash_right_tiles[6])
+            {PPUDATA}(crash_right_tiles[7])
+            {PPUDATA}(crash_right_tiles[8])
+            {PPUDATA}(crash_right_tiles[9])
+
+            ppu_set_addr($2316)
+            {PPUDATA}(crash_right_tiles[10])
+            {PPUDATA}(crash_right_tiles[11])
+            {PPUDATA}(crash_right_tiles[12])
+            {PPUDATA}(crash_right_tiles[13])
+            {PPUDATA}(crash_right_tiles[14])
+
+            ppu_set_addr($2336)
+            {PPUDATA}(crash_right_tiles[15])
+            {PPUDATA}(crash_right_tiles[16])
+            {PPUDATA}(crash_right_tiles[17])
+            {PPUDATA}(crash_right_tiles[18])
+            {PPUDATA}(crash_right_tiles[19])
     
     ppu_reset_scroll(0, 0)
 
