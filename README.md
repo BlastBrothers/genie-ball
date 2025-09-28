@@ -1,5 +1,7 @@
 # Ball
 
+![](genie_ball_000.png)
+
 NES Recreation of Nintendo's 1980 Game & Watch game, [Ball](https://en.wikipedia.org/wiki/Ball_(video_game)). 
 
 Made for the [Game Genie Game Mini-Jam](https://forums.nesdev.org/viewtopic.php?t=26222), centered on the limitations of 16 KB PRG and a limited predefined CHR.
