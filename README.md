@@ -17,3 +17,5 @@ Press Start to start the game. Holding down Start will show the high score for t
 Use left and right on the D-pad to move your arms and juggle to your heart's content.
 
 ---
+
+Special thanks to itizio for their excellent Ball simulation that served as my primary reference for this project. You can play it for free online here: https://itizso.itch.io/nintendo-ball
