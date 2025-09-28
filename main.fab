@@ -340,8 +340,6 @@ mode main()
 
         switch game_state
             case GAME_STATE_IDLE
-                //TODO clear dropped ball GFX
-                
                 //if select is pressed, toggle between game A and game B
                 if pads[0].pressed & BUTTON_SELECT
                     will_be_game_a = !will_be_game_a
@@ -368,7 +366,6 @@ mode main()
                 break
             case GAME_STATE_END
                 process_movement()
-                //TODO draw dropped ball graphix
                 if game_end_timer == 0
                     game_state = GAME_STATE_IDLE
                     score = 0
